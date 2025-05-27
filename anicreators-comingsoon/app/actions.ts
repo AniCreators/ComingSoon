@@ -1,48 +1,46 @@
 "use server"
 
+import { supabase } from "@/lib/supabase"
+import { resend } from "@/lib/resend"
 import { revalidatePath } from "next/cache"
 
-type Subscriber = {
-  email: string
-  createdAt: Date
-}
-
-// In-memory storage for demo purposes
-// In a real app, you would use a database
-const subscribers: Subscriber[] = []
-
 export async function subscribeToWaitlist(email: string) {
-  // Validate email
   if (!email || !email.includes("@")) {
     throw new Error("Invalid email address")
   }
 
-  // Check if email already exists
-  if (subscribers.some((sub) => sub.email === email)) {
-    // Return success even if already subscribed to prevent email harvesting
+  // Check if already subscribed
+  const { data: existing, error: selectError } = await supabase
+    .from("WaitlistEmails")
+    .select("email")
+    .eq("email", email)
+    .single()
+
+  if (existing) {
     return { success: true }
   }
 
+  // Add to Supabase DB
+  const { error: insertError } = await supabase.from("WaitlistEmails").insert([{ email }])
+
+  if (insertError) {
+    console.error("DB Insert Error:", insertError)
+    throw new Error("Failed to save to database")
+  }
+
+  // Send email with Resend
   try {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Add to subscribers
-    subscribers.push({
-      email,
-      createdAt: new Date(),
+    await resend.emails.send({
+      from: "The AniCreators Team <theanicreatorscompany@gmail.com>",
+      to: email,
+      subject: "Thanks for joining the waitlist!",
+      html: `<p>Hi there,</p><p>Thanks for subscribing to AniCreators! You're now on the waitlist and we'll notify you as soon as we launch 🎉</p><p>— The AniCreators Team</p>`,
     })
-
-    console.log(`New subscriber: ${email}`)
-    console.log(`Total subscribers: ${subscribers.length}`)
-
-    // In a real app, you would save to a database here
-    // await db.insert(subscribers).values({ email, createdAt: new Date() })
-
-    revalidatePath("/")
-    return { success: true }
-  } catch (error) {
-    console.error("Failed to subscribe:", error)
-    throw new Error("Failed to subscribe")
+  } catch (emailError) {
+    console.error("Email Error:", emailError)
+    // Optional: don't block success if email fails
   }
+
+  revalidatePath("/")
+  return { success: true }
 }

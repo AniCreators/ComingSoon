@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, delay } from "framer-motion"
 import { ArrowRight, Mail, Star, CheckCircle2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -24,6 +24,7 @@ export default function ComingSoonPage() {
   const [isSubscribed, setIsSubscribed] = useState(false)
 
   const handleSubscribe = async (e: React.FormEvent) => {
+    
     e.preventDefault()
 
     if (!email || !email.includes("@")) {
@@ -63,7 +64,7 @@ export default function ComingSoonPage() {
       <CursorEffect />
       <Toaster />
 
-      <header className="container mx-auto px-4 py-6 flex items-center justify-between relative z-10">
+      <header className="container mx-auto px-4 pt-6 flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
           <motion.div
             initial={{ rotate: -10, scale: 0.9 }}
@@ -93,7 +94,7 @@ export default function ComingSoonPage() {
         </motion.div>
       </header>
 
-      <main className="container mx-auto px-4 pt-12 pb-24 relative z-10">
+      <main className="container mx-auto px-4 pb-24 relative z-10">
         <section className="py-12 md:py-24 flex flex-col items-center justify-center text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -118,8 +119,8 @@ export default function ComingSoonPage() {
           <div className="space-y-6 max-w-3xl mx-auto">
             <div className="relative">
               <AnimatedText
-                text="COMING SOON"
-                className="text-5xl md:text-7xl font-extrabold tracking-tight text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 dark:from-purple-400 dark:via-pink-300 dark:to-orange-300"
+                text="COMING SOON ..."
+                className="text-3xl md:text-5xl font-extrabold tracking-tight text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 dark:from-purple-400 dark:via-pink-300 dark:to-orange-300"
               />
               <motion.div
                 className="absolute -z-10 inset-0 blur-3xl opacity-20 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 dark:opacity-30"
@@ -229,7 +230,7 @@ export default function ComingSoonPage() {
             <FeatureCard
               title="Asset Store"
               description="Buy and sell animation assets, templates, and resources to speed up your workflow."
-              imageSrc="/images/creator-community.png"
+              imageSrc="/images/asset-store.png"
               delay={0.5}
             />
           </div>
@@ -329,7 +330,7 @@ export default function ComingSoonPage() {
                     className="relative h-[250px] w-full rounded-xl overflow-hidden shadow-lg"
                   >
                     <Image
-                      src="/images/creator-community.png"
+                      src="/images/thanks.png"
                       alt="Anime creator community"
                       fill
                       className="object-cover"

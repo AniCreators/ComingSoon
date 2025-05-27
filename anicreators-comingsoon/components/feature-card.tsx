@@ -25,7 +25,7 @@ export default function FeatureCard({ title, description, imageSrc, delay = 0 }:
           src={imageSrc || "/placeholder.svg"}
           alt={title}
           fill
-          className="object-cover transition-transform duration-500 hover:scale-110"
+          className="object-cover transition-transform duration-500 hover:scale-100"
         />
       </div>
       <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{title}</h3>
