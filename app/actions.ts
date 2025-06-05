@@ -20,6 +20,11 @@ export async function subscribeToWaitlist(email: string) {
     return { success: true }
   }
 
+  if (selectError) {
+    console.error("DB Select Error:", selectError)
+    throw new Error("Failed to check existing email")
+  }
+
   // Add to Supabase DB
   const { error: insertError } = await supabase.from("WaitlistEmails").insert([{ email }])
 

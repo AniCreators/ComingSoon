@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence, delay } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight, Mail, Star, CheckCircle2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -48,9 +48,10 @@ export default function ComingSoonPage() {
         variant: "default",
       })
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "";
       toast({
         title: "Something went wrong",
-        description: "Please try again later",
+        description: `Please try again later ${errorMessage}`,
         variant: "destructive",
       })
     } finally {
@@ -248,7 +249,7 @@ export default function ComingSoonPage() {
                 <div className="md:w-1/2">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Be the First to Know</h2>
                   <p className="text-gray-700 dark:text-gray-300 mb-6">
-                    Join our waitlist to get early access and exclusive updates about our platform launch. We're
+                    Join our waitlist to get early access and exclusive updates about our platform launch. We are
                     building something special for anime creators and fans alike.
                   </p>
 
